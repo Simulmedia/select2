@@ -130,6 +130,10 @@ define([
   Results.prototype.showLoading = function (params) {
     this.hideLoading();
 
+    if (params.skipLoading != null && params.skipLoading){
+      return;
+    }
+
     var loadingMore = this.options.get('translations').get('searching');
 
     var loading = {

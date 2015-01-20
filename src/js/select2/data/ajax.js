@@ -43,6 +43,10 @@ define([
     var matches = [];
     var self = this;
 
+    if(params.skipQuery != null && params.skipQuery){
+      return;
+    }
+
     if (this._request) {
       this._request.abort();
       this._request = null;

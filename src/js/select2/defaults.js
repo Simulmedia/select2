@@ -30,6 +30,7 @@ define([
   './dropdown/minimumResultsForSearch',
   './dropdown/selectOnClose',
   './dropdown/closeOnSelect',
+  './dropdown/reOpenDropdown',
 
   './i18n/en'
 ], function ($, ResultsList,
@@ -43,8 +44,7 @@ define([
              MinimumInputLength, MaximumInputLength, MaximumSelectionLength,
 
              Dropdown, DropdownSearch, HidePlaceholder, InfiniteScroll,
-             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect,
-
+             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect, ReOpenDropdown,
              EnglishTranslation) {
   function Defaults () {
     this.reset();
@@ -164,6 +164,14 @@ define([
       options.dropdownAdapter = Utils.Decorate(
         options.dropdownAdapter,
         AttachBody
+      );
+    }
+
+    if (options.reOpenDropdown != null &&
+      options.reOpenDropdown && options.multiple){
+      options.dropdownAdapter = Utils.Decorate(
+        options.dropdownAdapter,
+        ReOpenDropdown
       );
     }
 
@@ -326,6 +334,7 @@ define([
       maximumSelectionLength: 0,
       minimumResultsForSearch: 0,
       selectOnClose: false,
+      reOpenDropdown: null,
       sorter: function (data) {
         return data;
       },
