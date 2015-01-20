@@ -37,7 +37,8 @@ define([
     this.hideLoading();
 
     var $message = $(
-      '<li role="treeitem" class="select2-results__option"></li>'
+      '<li role="treeitem" ' +
+      'class="select2-results__option warning-message"></li>'
     );
 
     var message = this.options.get('translations').get(params.message);

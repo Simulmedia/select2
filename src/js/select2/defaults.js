@@ -335,6 +335,7 @@ define([
       minimumResultsForSearch: 0,
       selectOnClose: false,
       reOpenDropdown: null,
+      multipleSelectXOnRight: true,
       sorter: function (data) {
         return data;
       },

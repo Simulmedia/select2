@@ -84,7 +84,14 @@ define([
       var formatted = this.display(selection);
       var $selection = this.selectionContainer();
 
-      $selection.append(formatted);
+      onRight = this.options.get('multipleSelectXOnRight');
+      if (onRight){
+        $selection.prepend(formatted);
+      }
+      else{
+        $selection.append(formatted);
+      }
+
       $selection.prop('title', selection.title);
 
       $selection.data('data', selection);
