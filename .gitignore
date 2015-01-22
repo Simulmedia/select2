@@ -1,2 +1,10 @@
 node_modules
 dist/js/i18n/build.txt
+/.idea/.name
+/.idea/encodings.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/scopes/scope_settings.xml
+/.idea/sm-select2.iml
+/.idea/vcs.xml
+/.idea/workspace.xml
