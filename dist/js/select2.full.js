@@ -722,7 +722,8 @@ define('select2/results',[
     this.hideLoading();
 
     var $message = $(
-      '<li role="treeitem" class="select2-results__option"></li>'
+      '<li role="treeitem" ' +
+      'class="select2-results__option warning-message"></li>'
     );
 
     var message = this.options.get('translations').get(params.message);
@@ -814,6 +815,10 @@ define('select2/results',[
 
   Results.prototype.showLoading = function (params) {
     this.hideLoading();
+
+    if (params.skipLoading != null && params.skipLoading){
+      return;
+    }
 
     var loadingMore = this.options.get('translations').get('searching');
 
@@ -1508,7 +1513,6 @@ define('select2/selection/multiple',[
     var $container = $(
       '<li class="select2-selection__choice">' +
         '<span class="select2-selection__choice__remove" role="presentation">' +
-          '&times;' +
         '</span>' +
       '</li>'
     );
@@ -1531,7 +1535,14 @@ define('select2/selection/multiple',[
       var formatted = this.display(selection);
       var $selection = this.selectionContainer();
 
-      $selection.append(formatted);
+      onRight = this.options.get('multipleSelectXOnRight');
+      if (onRight){
+        $selection.prepend(formatted);
+      }
+      else{
+        $selection.append(formatted);
+      }
+
       $selection.prop('title', selection.title);
 
       $selection.data('data', selection);
@@ -3184,6 +3195,10 @@ define('select2/data/ajax',[
     var matches = [];
     var self = this;
 
+    if(params.skipQuery != null && params.skipQuery){
+      return;
+    }
+
     if (this._request) {
       this._request.abort();
       this._request = null;
@@ -4080,6 +4095,43 @@ define('select2/dropdown/closeOnSelect',[
   return CloseOnSelect;
 });
 
+define('select2/dropdown/reOpenDropdown',[
+
+], function () {
+  function ReOpenDropdown () { }
+  this.lastParams = {};
+
+  ReOpenDropdown.prototype.bind = function (decorated, container, $container) {
+    var self = this;
+
+    decorated.call(this, container, $container);
+
+    container.on('query', function (params) {
+      if (self.lastParams == params){
+        params.skipQuery = true;
+        params.skipLoading = true;
+      }
+      self.lastParams = params;
+      self.loading = true;
+    });
+
+    container.on('select', function () {
+      window.setTimeout(function () {
+        self.trigger('query', self.lastParams);
+        self.trigger('open');
+      }, 0);
+    });
+
+    container.on('unselect', function () {
+      window.setTimeout(function () {
+        self.trigger('query', self.lastParams);
+        self.trigger('open');
+      }, 0);
+    });
+  };
+
+  return ReOpenDropdown;
+});
 define('select2/i18n/en',[],function () {
   // English
   return {
@@ -4157,6 +4209,7 @@ define('select2/defaults',[
   './dropdown/minimumResultsForSearch',
   './dropdown/selectOnClose',
   './dropdown/closeOnSelect',
+  './dropdown/reOpenDropdown',
 
   './i18n/en'
 ], function ($, ResultsList,
@@ -4170,8 +4223,7 @@ define('select2/defaults',[
              MinimumInputLength, MaximumInputLength, MaximumSelectionLength,
 
              Dropdown, DropdownSearch, HidePlaceholder, InfiniteScroll,
-             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect,
-
+             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect, ReOpenDropdown,
              EnglishTranslation) {
   function Defaults () {
     this.reset();
@@ -4291,6 +4343,14 @@ define('select2/defaults',[
       options.dropdownAdapter = Utils.Decorate(
         options.dropdownAdapter,
         AttachBody
+      );
+    }
+
+    if (options.reOpenDropdown != null &&
+      options.reOpenDropdown && options.multiple){
+      options.dropdownAdapter = Utils.Decorate(
+        options.dropdownAdapter,
+        ReOpenDropdown
       );
     }
 
@@ -4453,6 +4513,8 @@ define('select2/defaults',[
       maximumSelectionLength: 0,
       minimumResultsForSearch: 0,
       selectOnClose: false,
+      reOpenDropdown: null,
+      multipleSelectXOnRight: true,
       sorter: function (data) {
         return data;
       },
