@@ -1096,13 +1096,7 @@ define('select2/selection/multiple',[
       var formatted = this.display(selection);
       var $selection = this.selectionContainer();
 
-      onRight = this.options.get('multipleSelectXOnRight');
-      if (onRight){
-        $selection.prepend(formatted);
-      }
-      else{
-        $selection.append(formatted);
-      }
+      $selection.append(formatted);
 
       $selection.prop('title', selection.title);
 
@@ -3784,7 +3778,9 @@ define('select2/defaults',[
              MinimumInputLength, MaximumInputLength, MaximumSelectionLength,
 
              Dropdown, DropdownSearch, HidePlaceholder, InfiniteScroll,
-             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect, ReOpenDropdown,
+             AttachBody, MinimumResultsForSearch, SelectOnClose,
+             CloseOnSelect, ReOpenDropdown,
+
              EnglishTranslation) {
   function Defaults () {
     this.reset();
@@ -4075,7 +4071,6 @@ define('select2/defaults',[
       minimumResultsForSearch: 0,
       selectOnClose: false,
       reOpenDropdown: null,
-      multipleSelectXOnRight: true,
       sorter: function (data) {
         return data;
       },

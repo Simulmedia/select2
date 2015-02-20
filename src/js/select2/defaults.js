@@ -44,7 +44,9 @@ define([
              MinimumInputLength, MaximumInputLength, MaximumSelectionLength,
 
              Dropdown, DropdownSearch, HidePlaceholder, InfiniteScroll,
-             AttachBody, MinimumResultsForSearch, SelectOnClose, CloseOnSelect, ReOpenDropdown,
+             AttachBody, MinimumResultsForSearch, SelectOnClose,
+             CloseOnSelect, ReOpenDropdown,
+
              EnglishTranslation) {
   function Defaults () {
     this.reset();
@@ -335,7 +337,6 @@ define([
       minimumResultsForSearch: 0,
       selectOnClose: false,
       reOpenDropdown: null,
-      multipleSelectXOnRight: true,
       sorter: function (data) {
         return data;
       },
